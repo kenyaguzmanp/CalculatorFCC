@@ -1,0 +1,109 @@
+body{
+    background-color: #f4777b;
+    font-family: 'Orbitron', sans-serif;
+}
+
+h1{
+    color: white;
+    text-align: center;
+}
+
+#calculatorOutput{
+     background-color: #a1ae76;
+    width: 210px;
+    height: 74px;
+    border-radius: 1em;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 20px;
+    padding-top: 20px;
+    
+}
+
+#calcWrapper{
+     background-color: #3a3a3c;
+    width: 250px;
+    height: 130px;
+    border-top-left-radius: 2em;
+    border-top-right-radius: 2em;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 45px;
+    padding-top: 20px;
+}
+
+#calculator{
+    background-color: #3a3a3c;
+    width: 250px;
+    padding-top: 20px;
+    padding-bottom: 30px;
+    border-bottom-left-radius: 2em;
+    border-bottom-right-radius: 2em;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#result{
+    padding-left: 15px;
+    font-size: 2em;
+}
+
+#result2{
+    background-color: #7a8459;
+    padding-left: 16px;
+    margin-top: -15px;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    font-size: 1em;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#errors{
+    text-align: center;
+    padding: 20px;
+}
+
+a{
+    margin: 5px;
+}
+
+.btn-primary{
+    color: #fff;
+    background-color: grey;
+    border-color: black;
+}
+
+.btn{
+   width: 39px;
+}
+
+.bigButton{
+    width: 66px;
+}
+
+.btn-danger{
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.btn-primary:hover{
+    border-color: black;
+    background-color: rgb(88, 85, 85);
+}
+
+#wholeCalc{
+    padding-top: 50px;
+}
+
+#fcc{
+   color: white;
+   margin-top: 400px;
+    margin-bottom: 0px;
+}
+
+#fcc a{
+   color: white;
+}
+

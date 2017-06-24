@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Calculator FCC</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="newcss.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+
+    </head>
+    <body>
+
+        <div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <p id="errors">No error for now...</p>  
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid" id="wholeCalc">
+            <h1>JavaScript Calculator</h1>
+
+            <div id="calcWrapper">
+                <div id="calculatorOutput">
+                    <p id="result">0</p>
+
+                </div>
+                <p id="result2">Operations:</p>
+
+
+                <div class="text-center" id="calculator">
+                    <a class="btn btn-danger" id="deleteAll">AC</a>
+                    <a class="btn btn-danger" id="deletePrevious">CE</a>            
+                    <a class="btn btn-primary" id="percentage">%</a>
+                    <a class="btn btn-primary" id="divide">/</a>
+
+                    <br/>
+
+                    <a class="btn btn-primary" id="7">7</a>
+                    <a class="btn btn-primary" id="8">8</a>
+                    <a class="btn btn-primary" id="9">9</a>
+                    <a class="btn btn-primary" id="multiplicate">x</a>
+
+                    <br/>
+
+                    <a class="btn btn-primary" id="4">4</a>
+                    <a class="btn btn-primary" id="5">5</a>
+                    <a class="btn btn-primary" id="6">6</a>
+                    <a class="btn btn-primary" id="sustract">-</a>
+
+                    <br/>
+
+                    <a class="btn btn-primary" id="1">1</a>
+                    <a class="btn btn-primary" id="2">2</a>
+                    <a class="btn btn-primary" id="3">3</a>
+                    <a class="btn btn-primary" id="0">0</a>
+
+
+                    <br/>              
+                    <a class="btn btn-primary" id="dot">.</a>
+                    <a class="btn btn-primary bigButton" id="total">=</a>
+                    <a class="btn btn-primary bigButton" id="add">+</a>  
+
+
+                </div>
+
+            </div>   
+
+        </div>
+
+        <div class="text-center">
+            <p id="fcc">Coded by <a href="https://www.freecodecamp.com/kenyaguzmanp" target="_blank" >Kenya Guzmán</a></p>
+        </div>
+
+
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>    
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                var operatorsObject = {
+                    'add': '+',
+                    'sustract': '-',
+                    'multiplicate': '*',
+                    'divide': '/',
+                    'percentage': '%'
+                            // 'dot': '.'
+                };
+                var operators = ['+', '-', '*', '/', '%'];
+                var dot = ['.'];
+                var numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+                var inputs = [];
+                var stringOfValues;
+                var operationFlag = 0;
+                var totalVal = 0;
+                var totalAcum = 0;
+                var values2;
+                var dotAcum = 0;
+                var size = 2; //size for rmain result in ems
+                var size2 = 1; //size for display roperations in ems
+
+                function defaultResult() {
+                    $("#result").html('0');
+                    $("#result2").html('0');
+                }
+
+                function defaultSizeFont() {
+                    size = 2;
+                    size2 = 1;
+                    $('#result').css('font-size', size + 'em');
+                    $('#result2').css('font-size', size2 + 'em');
+                }
+
+
+                function isItOperation(input) {
+                    if (Object.keys(operatorsObject).indexOf(input) !== -1) {
+                        operationFlag += 1;
+                        return true;
+                    }
+
+                    // dotAcum=0;
+                }
+
+                function isItNumber(input) {
+                    if (numbers.includes(Number(input))) {
+                        return true;
+
+                    }
+                }
+
+                function isItDot(input) {
+
+                    if (input === 'dot') {
+                        dotAcum += 1;
+                        return true;
+
+
+                    }
+
+
+                }
+
+                function deleteAll() {
+                    inputs = [];
+                    defaultResult();
+                }
+
+                function deletePrevious() {
+
+                    if (inputs[inputs.length - 1] === '.') {
+                        dotAcum -= 2;
+                    }
+
+                    console.log("entró a funcion borrar previo");
+                    inputs.pop();
+                    showOp();
+
+                }
+
+
+                function getValue(input) {
+
+                    // if is the first input:
+                    if (inputs.length === 0) {
+                        // validation that the first input is an operation   
+                        if (isItOperation(input) === true && input !== 'sustract') {
+                            //deleteAll();
+                            console.log("no operation first");
+                            $('#myModal').modal('toggle');
+                            $("#errors").html("You can't put an operation first");
+                            defaultResult();
+                            operationFlag = 0;
+
+                        } else if (input === 'sustract') {
+                            inputs.push('-');
+                            operationFlag = 0;
+                            showOp();
+                        }
+                        //validation that the input is a number
+                        else if (isItNumber(input)) {
+                            inputs.push(input);
+                            showOp();
+                        }
+                        //if is a dot
+                        else if (input === 'dot') {
+                            $('#myModal').modal('toggle');
+                            $("#errors").html("You can't put a dot first");
+                            console.log('no dot first ');
+
+                        }
+
+                    }
+                    //if is not the first input
+                    else {
+
+                        if (isItNumber(input) === true) {
+                            inputs.push(input);
+                            showOp();
+                        }
+
+
+                        //various operations
+                        else if (isItOperation(input) === true && operators.includes(inputs[inputs.length - 1]) === false && stringOfValues[stringOfValues.length - 1] !== '.') {
+                            inputs.push(operatorsObject[input]);
+
+                            dotAcum = 0;
+                            showOp();
+
+                        } else if (isItOperation(input) === true && operators.includes(inputs[inputs.length - 1]) === true) {
+                            console.log("no two operation");
+                            $('#myModal').modal('toggle');
+                            $("#errors").html("You can't put two consecutive operations");
+                            console.log("operationFlag in function no two operation: " + operationFlag);
+                            operationFlag -= 1;
+
+                        }
+
+                        //operation after a dot
+                        else if (isItOperation(input) === true && stringOfValues[stringOfValues.length - 1] === '.') {
+                            console.log("no operation after dot");
+                            $('#myModal').modal('toggle');
+                            $("#errors").html("You can't put an operation after a dot");
+                            console.log("operationFlag1: " + operationFlag);
+                            operationFlag = 0;
+                            console.log("operationFlag2: " + operationFlag);
+                        }
+
+
+
+                        //an operation  withput a previous total
+                        else if (isItOperation(input) === true && operationFlag === 2 && totalAcum === 0 && stringOfValues[stringOfValues.length - 1] !== '.') {
+                            inputs.push(operatorsObject[input]);
+                            dotAcum = 0;
+
+                            showOp();
+
+
+                        }
+
+
+                        //an operation after a previous total
+                        else if (isItOperation(input) === true && totalAcum > 0) {
+                            inputs.push(operatorsObject[input]);
+                            dotAcum = 0;
+                            showOp();
+
+                        }
+
+                        //a number with a total before
+                        else if (isItNumber(input) === true && totalAcum > 0) {
+                            inputs.push(input);
+                            showOp();
+
+                        }
+
+                        //dots:
+                        else if (isItDot(input) && stringOfValues[stringOfValues.length - 1] === '.') {
+
+                            console.log('no dots followed');
+                            $('#myModal').modal('toggle');
+                            $("#errors").html("You can't put two consecutive dots");
+                            dotAcum -= 1;
+
+                        } else if (isItDot(input) && stringOfValues[stringOfValues.length - 1] !== '.' && dotAcum < 3) {
+
+                            if (stringOfValues[stringOfValues.length - 1] !== '+' && stringOfValues[stringOfValues.length - 1] !== '-' && stringOfValues[stringOfValues.length - 1] !== '*' && stringOfValues[stringOfValues.length - 1] !== '/' && stringOfValues[stringOfValues.length - 1] !== '%') {
+                                inputs.push(dot[0]);
+                                showOp();
+                            } else {
+                                console.log("no dot alone after an operation");
+                                $('#myModal').modal('toggle');
+                                $("#errors").html("You can't put a dot alone after an operation");
+                                dotAcum -= 2;
+                            }
+
+                        }
+
+
+                        //no more than two dots
+                        else if (isItDot(input) && dotAcum >= 3) {
+                            console.log('no more dots!');
+                            $('#myModal').modal('toggle');
+                            $("#errors").html("You can't put more dots");
+                        }
+
+
+
+
+                    }
+
+
+                }
+
+                function showOp() {
+
+                    stringOfValues = inputs.join("");
+
+                    //resizing the text
+                    if (stringOfValues.length >= 8 && stringOfValues.length <= 17) {
+                        console.log("numero mas grade que pantalla");
+                        size = size - 0.1;
+                        size2 = size2 - 0.01;
+                        $('#result').css('font-size', size + 'em');
+                        $("#result").html(stringOfValues);
+                        values2 = stringOfValues;
+                        $("#result2").html(values2);
+
+                    } else if (stringOfValues.length > 17) {
+                        console.log("number too large to show!");
+                        $('#myModal').modal('toggle');
+                        $("#errors").html("Number too large to show");
+                        defaultSizeFont();
+                        deleteAll();
+
+                    } else {
+                        $("#result").html(stringOfValues);
+                        values2 = stringOfValues;
+                        $("#result2").html(values2);
+                    }
+
+                }
+
+                function resetInputs(val) {
+                    stringOfValues = val;
+                    inputs = [''];
+                    inputs.push(val);
+                }
+
+                //round values to 4 digits
+                function roundNumber(num) {
+                    return Math.round(num * Math.pow(10, 4)) / Math.pow(10, 4);
+                }
+
+
+
+
+                function getTotal() {
+                    totalAcum = totalAcum + 1;
+                    operationFlag = 0;
+                    stringOfValues = inputs.join("");
+                    totalVal = eval(stringOfValues); //valor evaluado de los strings
+                    totalVal = roundNumber(totalVal); //redondeo de numeros
+                    $("#result").html(totalVal);
+                    $("#result2").html(values2);
+                    resetInputs(totalVal);
+                    dotAcum = 0;
+                    if (isFinite(totalVal) === false) {
+                        console.log("infinity");
+                        resetInputs(0);
+                        $('#myModal').modal('toggle');
+                        $("#errors").html("You can't divide by 0");
+                    }
+
+                }
+
+
+
+                $("a").on("click", function () {
+                    if (this.id === "deleteAll") {
+                        operationFlag = 0;
+                        dotAcum = 0;
+                        deleteAll();
+                    }
+
+                    // if the button is delete previous but is the first input
+                    else if (this.id === "deletePrevious" && inputs.length === 0) {
+                        defaultResult();
+                    }
+                    // delete previous that is a number
+                    else if (this.id === "deletePrevious" && operationFlag === 0) {
+                        deletePrevious();
+                    }
+                    // delete previous that is an operation
+                    else if (this.id === "deletePrevious" && operators.includes(inputs[inputs.length - 1]) === true) {
+                        operationFlag = 0;
+                        deletePrevious();
+                    }
+
+                    //delete previous no matter what
+                    else if (this.id === "deletePrevious") {
+                        deletePrevious();
+                    }
+
+                    //total without any other total
+                    else if (this.id === "total" && totalAcum === 0) {
+                        getTotal();
+
+                    }
+
+                    //total with a total before
+                    else if (this.id === "total" && totalAcum > 0) {
+                        getTotal();
+
+                    } else {
+                        getValue(this.id);
+
+                    }
+
+
+                });
+
+
+
+            });
+
+
+        </script>
+
+
+
+
+    </body>
+</html>
