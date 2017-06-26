@@ -5,8 +5,7 @@
         <title>Calculator FCC</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" /> 
-     <!--   <link href="css/bootstrap.min.css" rel="stylesheet" /> -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
         <link href="newcss.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
@@ -58,13 +57,15 @@
                     <a class="btn btn-primary" id="1">1</a>
                     <a class="btn btn-primary" id="2">2</a>
                     <a class="btn btn-primary" id="3">3</a>
-                    <a class="btn btn-primary" id="0">0</a>
+                    <a class="btn btn-primary" id="add">+</a>
+                    
 
 
                     <br/>              
-                    <a class="btn btn-primary" id="dot">.</a>
+                    
+                    <a class="btn btn-primary bigButton" id="0">0</a>
+                    <a class="btn btn-primary bigButton" id="dot">.</a>
                     <a class="btn btn-primary bigButton" id="total">=</a>
-                    <a class="btn btn-primary bigButton" id="add">+</a>  
 
 
                 </div>
@@ -79,11 +80,8 @@
 
 
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>    
-        
-      <!--  <script href="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
-       <!-- <script href="js/bootstrap.min.js"></script> -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> 
-        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
         <script>
             $(document).ready(function () {
                 var operatorsObject = {
@@ -104,7 +102,7 @@
                 var totalAcum = 0;
                 var values2;
                 var dotAcum = 0;
-                var size = 2; //size for rmain result in ems
+                var size = 1.5; //size for rmain result in ems
                 var size2 = 1; //size for display roperations in ems
 
                 function defaultResult() {
@@ -113,7 +111,7 @@
                 }
 
                 function defaultSizeFont() {
-                    size = 2;
+                    size = 1.5;
                     size2 = 1;
                     $('#result').css('font-size', size + 'em');
                     $('#result2').css('font-size', size2 + 'em');
@@ -150,6 +148,7 @@
 
                 function deleteAll() {
                     inputs = [];
+                    defaultSizeFont();
                     defaultResult();
                 }
 
@@ -304,26 +303,26 @@
                     stringOfValues = inputs.join("");
 
                     //resizing the text
-                    if (stringOfValues.length >= 8 && stringOfValues.length <= 17) {
+                    if (stringOfValues.length >= 8 && stringOfValues.length <= 16) {
                         console.log("numero mas grade que pantalla");
                         size = size - 0.1;
                         size2 = size2 - 0.01;
                         $('#result').css('font-size', size + 'em');
                         $("#result").html(stringOfValues);
                         values2 = stringOfValues;
-                        $("#result2").html(values2);
+                        $("#result2").html("="+values2);
 
-                    } else if (stringOfValues.length > 17) {
+                    } else if (stringOfValues.length > 16) {
                         console.log("number too large to show!");
                         $('#myModal').modal('toggle');
                         $("#errors").html("Number too large to show");
                         defaultSizeFont();
-                        deleteAll();
+                       // deleteAll();
 
                     } else {
                         $("#result").html(stringOfValues);
                         values2 = stringOfValues;
-                        $("#result2").html(values2);
+                        $("#result2").html("="+values2);
                     }
 
                 }
@@ -349,11 +348,13 @@
                     totalVal = eval(stringOfValues); //valor evaluado de los strings
                     totalVal = roundNumber(totalVal); //redondeo de numeros
                     $("#result").html(totalVal);
-                    $("#result2").html(values2);
+                    $("#result2").html(values2+"=");
                     resetInputs(totalVal);
                     dotAcum = 0;
+                    //defaultSizeFont();
                     if (isFinite(totalVal) === false) {
                         console.log("infinity");
+                        $("#result").html("ERROR");
                         resetInputs(0);
                         $('#myModal').modal('toggle');
                         $("#errors").html("You can't divide by 0");
