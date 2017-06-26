@@ -45,7 +45,7 @@ h1{
 
 #result{
     padding-left: 15px;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 
 #result2{
@@ -78,9 +78,9 @@ a{
    width: 39px;
 }
 
-.bigButton{
-    width: 66px;
-}
+/*.bigButton{
+    width: 57px;
+}*/
 
 .btn-danger{
     color: #fff;
@@ -107,3 +107,9 @@ a{
    color: white;
 }
 
+#add{
+    float: right;
+    height: 72px;
+    margin-left: -16px;
+    margin-right: 28px;
+}
